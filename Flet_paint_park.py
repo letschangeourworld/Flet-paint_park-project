@@ -85,7 +85,37 @@ df_final.info()
 
 
 # In[ ]:
+kw_1 = '이물'   #이물
+kw_2 = '이색'   #이색
+kw_3 = '얼룩'   #얼룩
+kw_4 = '핀홀|핀 홀'   #핀홀
+kw_5 = '칠부족|칠 부족'   #칠부족
+kw_6 = '흐름'   #칠흐름
+kw_7 = '튐'   #칠튐
+kw_8 = '전착'   #전착불량
+kw_9 = '실러|실라|실링'   #실러불량
+kw_10 = '수연'   #수연불량
+kw_11 = '폴리싱|광택'   #폴리싱자국
 
 
 
 
+cond1 = df_final['불량내용'].str.contains(kw_1) 
+cond2 = df_final['불량내용'].str.contains(kw_2) 
+cond3 = df_final['불량내용'].str.contains(kw_3) 
+cond4 = df_final['불량내용'].str.contains(kw_4) 
+cond5 = df_final['불량내용'].str.contains(kw_5)
+cond6 = df_final['불량내용'].str.contains(kw_6)
+cond7 =  df_final['불량내용'].str.contains(kw_7) 
+cond8 =  df_final['불량내용'].str.contains(kw_8) 
+cond9 =  df_final['불량내용'].str.contains(kw_9) 
+cond10 =  df_final['불량내용'].str.contains(kw_10) 
+cond11 =  df_final['불량내용'].str.contains(kw_11) 
+
+
+ft1 = df[df_final['불량내용'].str.contains(kw_1)]
+print(ft1)
+ # ===========> 여기서 불량 발생
+
+
+df_fianl['도장 결함'] = 
