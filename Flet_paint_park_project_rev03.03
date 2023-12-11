@@ -1,0 +1,873 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "4309ac79",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "1cc211bc",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>계약번호</th>\n",
+       "      <th>ca223kp00011249</th>\n",
+       "      <th>생산번호</th>\n",
+       "      <th>HSE 398476</th>\n",
+       "      <th>차대번호</th>\n",
+       "      <th>KNANC81BBPS398476</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>차명</td>\n",
+       "      <td>카니발</td>\n",
+       "      <td>상호</td>\n",
+       "      <td>케이비캐피탈주식회사</td>\n",
+       "      <td>성명</td>\n",
+       "      <td>황**</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>지점/대리점</td>\n",
+       "      <td>동부)고덕대리점</td>\n",
+       "      <td>출하일</td>\n",
+       "      <td>20231030</td>\n",
+       "      <td>발생일</td>\n",
+       "      <td>20231103</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>주행거리</td>\n",
+       "      <td>8</td>\n",
+       "      <td>부위구분</td>\n",
+       "      <td>휀더</td>\n",
+       "      <td>불량구분</td>\n",
+       "      <td>도장</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>불량내용</td>\n",
+       "      <td>RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     계약번호                               ca223kp00011249  생산번호  HSE 398476  \\\n",
+       "0      차명                                           카니발    상호  케이비캐피탈주식회사   \n",
+       "1  지점/대리점                                      동부)고덕대리점   출하일    20231030   \n",
+       "2    주행거리                                             8  부위구분          휀더   \n",
+       "3    불량내용  RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)   NaN         NaN   \n",
+       "\n",
+       "   차대번호 KNANC81BBPS398476  \n",
+       "0    성명               황**  \n",
+       "1   발생일          20231103  \n",
+       "2  불량구분                도장  \n",
+       "3   NaN               NaN  "
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = pd.read_excel(\"hwanip_data.xlsx\")\n",
+    "\n",
+    "df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "17b97a3d",
+   "metadata": {},
+   "source": [
+    "## df1 => 계약번호, 차명, 지점, 대리점, 주행거리, 불량내용\n",
+    "## df2 => 생산번호, 상호, 출하일, 부위구분, Nan\n",
+    "## df3 => 차대번호, 성명, 발생일, 불량구분, Nan"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "ac554dec",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>index</th>\n",
+       "      <th>0</th>\n",
+       "      <th>1</th>\n",
+       "      <th>2</th>\n",
+       "      <th>3</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>계약번호</td>\n",
+       "      <td>차명</td>\n",
+       "      <td>지점/대리점</td>\n",
+       "      <td>주행거리</td>\n",
+       "      <td>불량내용</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>ca223kp00011249</td>\n",
+       "      <td>카니발</td>\n",
+       "      <td>동부)고덕대리점</td>\n",
+       "      <td>8</td>\n",
+       "      <td>RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "             index    0         1     2  \\\n",
+       "0             계약번호   차명    지점/대리점  주행거리   \n",
+       "1  ca223kp00011249  카니발  동부)고덕대리점     8   \n",
+       "\n",
+       "                                              3  \n",
+       "0                                          불량내용  \n",
+       "1  RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)  "
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df1 = df.iloc[:,:2].T.reset_index()\n",
+    "df2 = df.iloc[:,2:4].T.reset_index()\n",
+    "df3 = df.iloc[:,4:6].T.reset_index()\n",
+    "df1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "82b15bd8",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>index</th>\n",
+       "      <th>0</th>\n",
+       "      <th>1</th>\n",
+       "      <th>2</th>\n",
+       "      <th>3</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>생산번호</td>\n",
+       "      <td>상호</td>\n",
+       "      <td>출하일</td>\n",
+       "      <td>부위구분</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>HSE 398476</td>\n",
+       "      <td>케이비캐피탈주식회사</td>\n",
+       "      <td>20231030</td>\n",
+       "      <td>휀더</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        index           0         1     2    3\n",
+       "0        생산번호          상호       출하일  부위구분  NaN\n",
+       "1  HSE 398476  케이비캐피탈주식회사  20231030    휀더  NaN"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "2611a2da",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>index</th>\n",
+       "      <th>0</th>\n",
+       "      <th>1</th>\n",
+       "      <th>2</th>\n",
+       "      <th>3</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>차대번호</td>\n",
+       "      <td>성명</td>\n",
+       "      <td>발생일</td>\n",
+       "      <td>불량구분</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>KNANC81BBPS398476</td>\n",
+       "      <td>황**</td>\n",
+       "      <td>20231103</td>\n",
+       "      <td>도장</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "               index    0         1     2    3\n",
+       "0               차대번호   성명       발생일  불량구분  NaN\n",
+       "1  KNANC81BBPS398476  황**  20231103    도장  NaN"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df3"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "a1572520",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>차대번호</th>\n",
+       "      <th>성명</th>\n",
+       "      <th>발생일</th>\n",
+       "      <th>불량구분</th>\n",
+       "      <th>NaN</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>KNANC81BBPS398476</td>\n",
+       "      <td>황**</td>\n",
+       "      <td>20231103</td>\n",
+       "      <td>도장</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "0               차대번호   성명       발생일 불량구분  NaN\n",
+       "0  KNANC81BBPS398476  황**  20231103   도장  NaN"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df11 = pd.DataFrame(columns=df1.iloc[0, :], data=[df1.iloc[1, :].values])\n",
+    "df22 = pd.DataFrame(columns=df2.iloc[0, :], data=[df2.iloc[1, :].values])\n",
+    "df33 = pd.DataFrame(columns=df3.iloc[0, :], data=[df3.iloc[1, :].values])\n",
+    "df33"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "601a4cba",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>생산번호</th>\n",
+       "      <th>상호</th>\n",
+       "      <th>출하일</th>\n",
+       "      <th>부위구분</th>\n",
+       "      <th>NaN</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>HSE 398476</td>\n",
+       "      <td>케이비캐피탈주식회사</td>\n",
+       "      <td>20231030</td>\n",
+       "      <td>휀더</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "0        생산번호          상호       출하일 부위구분  NaN\n",
+       "0  HSE 398476  케이비캐피탈주식회사  20231030   휀더  NaN"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df22"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "5d322317",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>계약번호</th>\n",
+       "      <th>차명</th>\n",
+       "      <th>지점/대리점</th>\n",
+       "      <th>주행거리</th>\n",
+       "      <th>불량내용</th>\n",
+       "      <th>생산번호</th>\n",
+       "      <th>상호</th>\n",
+       "      <th>출하일</th>\n",
+       "      <th>부위구분</th>\n",
+       "      <th>차대번호</th>\n",
+       "      <th>성명</th>\n",
+       "      <th>발생일</th>\n",
+       "      <th>불량구분</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>ca223kp00011249</td>\n",
+       "      <td>카니발</td>\n",
+       "      <td>동부)고덕대리점</td>\n",
+       "      <td>8</td>\n",
+       "      <td>RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)</td>\n",
+       "      <td>HSE 398476</td>\n",
+       "      <td>케이비캐피탈주식회사</td>\n",
+       "      <td>20231030</td>\n",
+       "      <td>휀더</td>\n",
+       "      <td>KNANC81BBPS398476</td>\n",
+       "      <td>황**</td>\n",
+       "      <td>20231103</td>\n",
+       "      <td>도장</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "0             계약번호   차명    지점/대리점  주행거리  \\\n",
+       "0  ca223kp00011249  카니발  동부)고덕대리점     8   \n",
+       "\n",
+       "0                                          불량내용        생산번호          상호  \\\n",
+       "0  RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)  HSE 398476  케이비캐피탈주식회사   \n",
+       "\n",
+       "0       출하일 부위구분               차대번호   성명       발생일 불량구분  \n",
+       "0  20231030   휀더  KNANC81BBPS398476  황**  20231103   도장  "
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_final = pd.concat([df11,df22.iloc[:,:4]], axis = 1)\n",
+    "df_final = pd.concat([df_final,df33.iloc[:,:4]], axis =1)\n",
+    "df_final"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dce84ef8",
+   "metadata": {},
+   "source": [
+    "# ※12/11 불량내용 솎아내기"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "1e4aafff",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df_final['도장결함'] = 0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "f39b9764",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import nltk\n",
+    "from nltk import FreqDist\n",
+    "from nltk.tokenize import word_tokenize"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "c92c523d",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[nltk_data] Downloading package punkt to\n",
+      "[nltk_data]     C:\\Users\\barkbilbo\\AppData\\Roaming\\nltk_data...\n",
+      "[nltk_data]   Package punkt is already up-to-date!\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "nltk.download('punkt')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "cd5f07fa",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 저 표에서 '불량내용'만 뽑기\n",
+    "defect=df_final.iloc[0,4]\n",
+    "print(defect)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "d12b7c92",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['RH',\n",
+       " ')',\n",
+       " '리어',\n",
+       " '휀더',\n",
+       " '도장',\n",
+       " '이물질',\n",
+       " '(',\n",
+       " '15MM',\n",
+       " ')',\n",
+       " ',',\n",
+       " 'RH',\n",
+       " ')',\n",
+       " '백도어',\n",
+       " '내부',\n",
+       " '실링',\n",
+       " '불량',\n",
+       " '(',\n",
+       " '15MM',\n",
+       " ')']"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# 단어 쪼개기\n",
+    "words = word_tokenize(defect)\n",
+    "words"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "da9e1cb1",
+   "metadata": {},
+   "source": [
+    "kw_1 = '이물'   #이물\n",
+    "kw_2 = '이색'   #이색\n",
+    "kw_3 = '얼룩'   #얼룩\n",
+    "kw_4 = '핀홀|핀 홀'   #핀홀\n",
+    "kw_5 = '칠부족|칠 부족'   #칠부족\n",
+    "kw_6 = '흐름'   #칠흐름\n",
+    "kw_7 = '튐'   #칠튐\n",
+    "kw_8 = '전착'   #전착불량\n",
+    "kw_9 = '실러|실라|실링'   #실러불량\n",
+    "kw_10 = '수연'   #수연불량\n",
+    "kw_11 = '폴리싱|광택'   #폴리싱자국"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "9d4db2f9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 특정 단어('이물')가 문장에 포함되어 있는지 확인하고 출력하기\n",
+    "###### 질문.... 여기서 다른 단어와 띄어쓰기 없이 결합되어있는 것을 구분할 수 있는 방법이 있을까??\n",
+    "###### ex) 광택심함 => 광택 으로 분류\n",
+    "\n",
+    "if '이물' in words or '이물질' in words:\n",
+    "    df_final['도장결함'] = '이물'\n",
+    "    \n",
+    "if '이색' in words:\n",
+    "    df_final['도장결함'] = '이색'    \n",
+    "\n",
+    "if '얼룩' in words:\n",
+    "    df_final['도장결함'] = '얼룩'\n",
+    "    \n",
+    "if '핀홀' in words or '핀 홀' in words:\n",
+    "    df_final['도장결함'] = '핀홀'\n",
+    "    \n",
+    "if '칠부족' in words or '칠 부족' in words:\n",
+    "    df_final['도장결함'] = '칠부족'\n",
+    "    \n",
+    "if '흐름' in words or '칠흐름' in words or '칠 흐름' in words:\n",
+    "    df_final['도장결함'] = '칠흐름'\n",
+    "    \n",
+    "if '칠튐' in words or '칠 튐' in words:\n",
+    "    df_final['도장결함'] = '칠튐'\n",
+    "    \n",
+    "if '전착' in words or '전착흐름' in words or '전착 흐름' in words:\n",
+    "    df_final['도장결함'] = '전착불량'\n",
+    "    \n",
+    "if '실러' in words or '실라' in words or '실링' in words or '실러불량' in words or '실라불량' in words or '실링불량' in words:       \n",
+    "    df_final['도장결함'] = '실러불량'\n",
+    "    \n",
+    "if '폴리싱' in words or '광택' in words:\n",
+    "    df_final['도장결함'] = '폴리싱자국'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "81664244",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>계약번호</th>\n",
+       "      <th>차명</th>\n",
+       "      <th>지점/대리점</th>\n",
+       "      <th>주행거리</th>\n",
+       "      <th>불량내용</th>\n",
+       "      <th>생산번호</th>\n",
+       "      <th>상호</th>\n",
+       "      <th>출하일</th>\n",
+       "      <th>부위구분</th>\n",
+       "      <th>차대번호</th>\n",
+       "      <th>성명</th>\n",
+       "      <th>발생일</th>\n",
+       "      <th>불량구분</th>\n",
+       "      <th>도장결함</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>ca223kp00011249</td>\n",
+       "      <td>카니발</td>\n",
+       "      <td>동부)고덕대리점</td>\n",
+       "      <td>8</td>\n",
+       "      <td>RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)</td>\n",
+       "      <td>HSE 398476</td>\n",
+       "      <td>케이비캐피탈주식회사</td>\n",
+       "      <td>20231030</td>\n",
+       "      <td>휀더</td>\n",
+       "      <td>KNANC81BBPS398476</td>\n",
+       "      <td>황**</td>\n",
+       "      <td>20231103</td>\n",
+       "      <td>도장</td>\n",
+       "      <td>실러불량</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "0             계약번호   차명    지점/대리점  주행거리  \\\n",
+       "0  ca223kp00011249  카니발  동부)고덕대리점     8   \n",
+       "\n",
+       "0                                          불량내용        생산번호          상호  \\\n",
+       "0  RH)리어 휀더 도장 이물질(15MM), RH)백도어 내부 실링 불량(15MM)  HSE 398476  케이비캐피탈주식회사   \n",
+       "\n",
+       "0       출하일 부위구분               차대번호   성명       발생일 불량구분  도장결함  \n",
+       "0  20231030   휀더  KNANC81BBPS398476  황**  20231103   도장  실러불량  "
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_final\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1eb643ab",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "67f46e6e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dc43bb04",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
