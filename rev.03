@@ -1,0 +1,200 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+
+
+# In[2]:
+
+
+df = pd.read_excel("hwanip_data.xlsx")
+
+df
+
+
+# ## df1 => 계약번호, 차명, 지점, 대리점, 주행거리, 불량내용
+# ## df2 => 생산번호, 상호, 출하일, 부위구분, Nan
+# ## df3 => 차대번호, 성명, 발생일, 불량구분, Nan
+
+# In[3]:
+
+
+df1 = df.iloc[:,:2].T.reset_index()
+df2 = df.iloc[:,2:4].T.reset_index()
+df3 = df.iloc[:,4:6].T.reset_index()
+df1
+
+
+# In[4]:
+
+
+df2
+
+
+# In[5]:
+
+
+df3
+
+
+# In[6]:
+
+
+df11 = pd.DataFrame(columns=df1.iloc[0, :], data=[df1.iloc[1, :].values])
+df22 = pd.DataFrame(columns=df2.iloc[0, :], data=[df2.iloc[1, :].values])
+df33 = pd.DataFrame(columns=df3.iloc[0, :], data=[df3.iloc[1, :].values])
+df33
+
+
+# In[7]:
+
+
+df22
+
+
+# In[8]:
+
+
+df_final = pd.concat([df11,df22.iloc[:,:4]], axis = 1)
+df_final = pd.concat([df_final,df33.iloc[:,:4]], axis =1)
+df_final
+
+
+# # ※12/10 불량내용 솎아내기
+
+# In[ ]:
+
+
+df_final['도장결함'] = 0
+
+
+# In[ ]:
+
+
+import nltk
+from nltk import FreqDist
+from nltk.tokenize import word_tokenize
+
+
+# In[ ]:
+
+
+nltk.download('punkt')
+
+
+# In[ ]:
+
+
+# 저 표에서 '불량내용'만 뽑기
+defect=df_final.iloc[0,4]
+print(defect)"
+
+
+# In[ ]:
+
+
+# 단어 쪼개기
+words = word_tokenize(defect)
+words
+
+
+# In[ ]:
+
+
+# 특정 단어('이물')가 문장에 포함되어 있는지 확인하고 출력하기
+###### 질문.... 여기서 다른 단어와 띄어쓰기 없이 결합되어있는 것을 구분할 수 있는 방법이 있을까??
+###### ex) 광택심함 => 광택 으로 분류
+
+
+# In[ ]:
+
+
+if '이물' in words or '이물질' in words:
+    df_final['도장결함'] = '이물'
+
+
+# In[ ]:
+
+
+if '이색' in words:
+    df_final['도장결함'] = '이색
+
+
+# In[ ]:
+
+
+if '이물' in words or '이물질' in words:
+    df_final['도장결함'] = '이물'
+
+
+# In[ ]:
+
+
+if '이색' in words:
+    df_final['도장결함'] = '이색'
+
+
+# In[ ]:
+
+
+if '얼룩' in words:
+    df_final['도장결함'] = '얼룩'
+
+
+# In[ ]:
+
+
+if '핀홀' in words or '핀 홀' in words:
+    df_final['도장결함'] = '핀홀'
+
+
+# In[ ]:
+
+
+if '칠부족' in words or '칠 부족' in words:
+    df_final['도장결함'] = '칠부족'
+
+
+# In[ ]:
+
+
+if '흐름' in words or '칠흐름' in words or '칠 흐름' in words:
+    df_final['도장결함'] = '칠흐름'
+
+
+# In[ ]:
+
+
+if '칠튐' in words or '칠 튐' in words:
+    df_final['도장결함'] = '칠튐'
+
+
+# In[ ]:
+
+
+if '전착' in words or '전착흐름' in words or '전착 흐름' in words:
+    df_final['도장결함'] = '전착불량'
+
+
+# In[ ]:
+
+
+if '실러' in words or '실라' in words or '실링' in words or '실러불량' in words or '실라불량' in words or '실링불량' in words:       \n",
+    df_final['도장결함'] = '실러불량'
+
+
+# In[ ]:
+
+
+if '폴리싱' in words or '광택' in words:
+    df_final['도장결함'] = '폴리싱자국'
+
+
+# In[ ]:
+
+
+
+
